@@ -7,7 +7,12 @@ impl Vector2D {
 
 pub struct DataSet { data_points: Vec<Vector2D> }
 impl DataSet {
-    pub fn new(dataset: Vec<Vector2D>) -> Self { return Self {data_points: dataset}}
+    pub fn new(dataset: Vec<Vector2D>) -> Result<Self, String> { 
+        if dataset.len() == 0 {
+            Err::<Self, String>(format!("Dataset cannot be empty."));
+        }
+        return Ok(Self {data_points: dataset});
+    }
     fn get_all_x(&self) -> Vec<f64> {
         let mut x_vec: Vec<f64> = Vec::new();
         for dp in &self.data_points {
