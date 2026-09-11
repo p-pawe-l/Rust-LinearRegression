@@ -30,7 +30,6 @@ impl DataSet {
     }
 }
 
-
 pub struct LinearRegression { coefficients: Vector2D }
 impl LinearRegression {
     pub fn new() -> Self { return Self {coefficients: Vector2D::new(0.0, 0.0)} }
