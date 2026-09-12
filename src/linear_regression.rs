@@ -39,13 +39,6 @@ pub struct DataSet {
 }
 
 #[allow(dead_code)]
-pub fn process_dataset(dataset: &mut DataSet, func: &dyn Fn(&mut Vector2D)) {
-    for vec in &mut dataset.data_points {
-        func(vec);
-    }
-}
-
-#[allow(dead_code)]
 impl DataSet {
     pub fn new(dataset: Vec<Vector2D>) -> Result<Self, String> {
         if dataset.is_empty() {
@@ -75,7 +68,9 @@ impl DataSet {
         mean_vec.y = self.get_all_y().iter().sum::<f64>() / (self.data_points.len() as f64);
         return mean_vec;
     }
-}
+    pub fn process<F>(&mut self, mut func: F) where F: FnMut() {
+        self.data_points.iter().for_each(func);
+    }
 
 #[allow(dead_code)]
 pub struct LinearRegressionModel {
