@@ -1,4 +1,7 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::{BufRead, BufReader, Error};
+
 
 pub enum Value {
     Int(i64),
@@ -14,6 +17,7 @@ pub enum Column {
 }
 pub struct CsvFrame { columns: HashMap<String, Column>, }
 impl CsvFrame {
+    pub fn new() -> Self { Self {columns: HashMap::new() } }
     fn get_column(&self, key: &str) -> Result<&Column, String> {
         return self.columns.get(key).ok_or(format!("Column '{}' not found.", key))
     }
@@ -24,6 +28,24 @@ impl CsvFrame {
     pub fn row(&self, index: i32) -> Result<HashMap<String, Value>, String> {}
 }
 
-pub fn read(filename: &str) -> CsvFrame {}
+fn fetch_keys(reader: &BufReader) -> Result<Vec<str>, Error> {
+    return reader.lines();
+}
+
+pub fn read_csv(filename: &str) -> Result<CsvFrame, Error> {
+    let file = File::open(filename)?;    
+    let reader = BufReader::new(file);
+    let csv_frame: CsvFrame = CsvFrame::new();
+
+    let keys: Vec<str> = fetch_keys(reader)?;
+    for line in reader.lines() {
+        let values: Vec<&str> = line?.split(',').collect();
+        for num in 0..keys.len() {
+            csv_frame.columns.insert(keys[num], values[num]);
+        }
+    }
+
+    return Ok(csv_frame);
+}
 
 
