@@ -1,0 +1,14 @@
+[project]
+name = "rust-linear-regression"
+version = "0.1.0"
+description = "Notebooks for visualizing Rust linear regression output"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "matplotlib",
+    "jupyter",
+]
+
+[tool.uv]
+package = false
