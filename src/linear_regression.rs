@@ -1,15 +1,19 @@
+#[allow(dead_code)]
 pub struct Vector2D { x: f64, y: f64 }
+#[allow(dead_code)]
 impl Vector2D {
     pub fn new(px: f64, py: f64) -> Self { Self { x: px, y: py} }
     pub fn get_x(&self) -> f64 { return self.x; }
     pub fn get_y(&self) -> f64 { return self.y; }
 }
 
+#[allow(dead_code)]
 pub struct DataSet { data_points: Vec<Vector2D> }
+#[allow(dead_code)]
 impl DataSet {
     pub fn new(dataset: Vec<Vector2D>) -> Result<Self, String> { 
         if dataset.len() == 0 {
-            Err::<Self, String>(format!("Dataset cannot be empty."));
+            return Err::<Self, String>(format!("Dataset cannot be empty."));
         }
         return Ok(Self {data_points: dataset});
     }
@@ -35,16 +39,18 @@ impl DataSet {
     }
 }
 
-pub struct LinearRegression { coefficients: Vector2D }
-impl LinearRegression {
+#[allow(dead_code)]
+pub struct LinearRegressionModel { coefficients: Vector2D }
+#[allow(dead_code)]
+impl LinearRegressionModel {
     pub fn new() -> Self { return Self {coefficients: Vector2D::new(0.0, 0.0)} }
     pub fn get_a(&self) -> f64 { return self.coefficients.get_x(); }
     pub fn get_b(&self) -> f64 { return self.coefficients.get_y();}
     pub fn fit(&mut self, dataset: &DataSet) {
         let mean_vec = dataset.calc_mean();
         
-        let mut yx = 0.0;
-        let mut x_squared = 0.0;
+        let mut yx: f64 = 0.0;
+        let mut x_squared: f64 = 0.0;
     
         for dp in &dataset.data_points {
             yx = yx + (dp.get_y() - mean_vec.get_y()) * (dp.get_x() - mean_vec.get_x());
