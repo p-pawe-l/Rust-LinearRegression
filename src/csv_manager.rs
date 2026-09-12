@@ -78,6 +78,7 @@ pub struct CsvFrame {
     column_order: Vec<String>,
 }
 
+#[allow(dead_code)]
 impl CsvFrame {
     pub fn new() -> Self {
         Self { columns: HashMap::new(), column_order: Vec::new() }
@@ -158,6 +159,7 @@ fn infer_column(values: Vec<String>) -> Column {
     Column::Text(values)
 }
 
+#[allow(dead_code)]
 pub fn read_csv(filename: &str) -> Result<CsvFrame, CsvError> {
     let file = File::open(filename)?;
     let mut reader = BufReader::new(file);

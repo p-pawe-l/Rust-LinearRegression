@@ -62,6 +62,9 @@ impl DataSet {
         }
         y_vec
     }
+    pub fn len(&self) -> usize {
+        self.data_points.len()
+    }
     pub fn calc_mean(&self) -> Vector2D {
         let mut mean_vec: Vector2D = Vector2D::new(0.0, 0.0);
         mean_vec.x = self.get_all_x().iter().sum::<f64>() / (self.data_points.len() as f64);
@@ -96,18 +99,22 @@ impl LinearRegressionModel {
         self.coefficients.get_y()
     }
     pub fn fit(&mut self, dataset: &DataSet) {
-        let mean_vec = dataset.calc_mean();
+        let n: f64 = dataset.len() as f64;
 
-        let mut yx: f64 = 0.0;
-        let mut x_squared: f64 = 0.0;
+        let mut xnyn: f64 = 0.0;
+        let mut xn: f64 = 0.0;
+        let mut yn: f64 = 0.0;
+        let mut xn_sq: f64 = 0.0;
 
         for dp in &dataset.data_points {
-            yx += (dp.get_y() - mean_vec.get_y()) * (dp.get_x() - mean_vec.get_x());
-            x_squared += dp.get_x() - mean_vec.get_x();
+            xnyn += dp.get_x() * dp.get_y();
+            xn += dp.get_x();
+            yn += dp.get_y();
+            xn_sq += dp.get_x().powi(2);
         }
 
-        self.coefficients.y = yx / x_squared;
-        self.coefficients.x = mean_vec.get_y() - self.coefficients.y * mean_vec.get_x();
+        self.coefficients.x = (n * xnyn - xn * yn) / (n * xn_sq - xn.powi(2));
+        self.coefficients.y = yn / n - self.coefficients.x * xn / n;
     }
     pub fn predict(&self, x: f64) -> f64 {
         self.get_a() * x + self.get_b()
