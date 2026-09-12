@@ -1,3 +1,5 @@
+use std::io::Write;
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub struct Vector2D {
@@ -118,5 +120,13 @@ impl LinearRegressionModel {
     }
     pub fn predict(&self, x: f64) -> f64 {
         self.get_a() * x + self.get_b()
+    }
+    pub fn save(&self, filename: &str) -> Result<(), std::io::Error> {
+        let file: std::fs::File = std::fs::File::create(filename)?;
+        let mut writer = std::io::BufWriter::new(&file);
+
+        writer.write_fmt(format_args!("{},{}", self.get_a(), self.get_b()))?;
+        
+        Ok(())
     }
 }

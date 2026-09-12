@@ -18,8 +18,7 @@ fn main() -> Result<(), csv_manager::CsvError> {
     let mut model: linear_regression::LinearRegressionModel =
         linear_regression::LinearRegressionModel::new();
     model.fit(&dataset.unwrap());
-
-    println!("a: {}, b: {}", model.get_a(), model.get_b());
+    model.save("models/model_50")?;
 
     Ok(())
 }
